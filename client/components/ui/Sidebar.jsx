@@ -111,8 +111,8 @@ const Sidebar = () => {
           <>
             {!collapsed && (
               <Button
-                variant="secondary"
-                className="w-full mb-4"
+                variant="outline"
+                className="w-full mb-4 cursor-pointer"
                 onClick={() => router.push("/course")}
               >
                 Your Courses

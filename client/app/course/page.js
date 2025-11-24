@@ -6,6 +6,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Home from "@/components/ui/Home";
+import HomeButton from "@/components/ui/HomeButton";
 const page = () => {
   const router = useRouter();
   const { data: session } = useSession();
@@ -32,27 +34,32 @@ const page = () => {
     router.push(`course/${course._id}`);
   };
   return (
-    <div className="flex flex-col p-4 h-screen bg-zinc-900 text-white">
-      <div className="flex flex-wrap gap-8 m-8 justify-start">
-        {courses.map((course, index) => (
-          <Card
-            key={index}
-            className="shadow-lg p-4 rounded-lg h-full flex flex-col"
-            style={{ flex: "1 0 21%", maxWidth: "23%" }}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-zinc-900 text-white p-4 bg-dots overflow-y-auto">
+    
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-7xl mt-10">
+    <HomeButton/>
+      {courses.map((course, index) => (
+        <Card
+          key={index}
+          className="bg-zinc-900  rounded-2xl shadow-xl border-3 border-zinc-700 p-6 flex flex-col justify-between hover:scale-[1.02] transition-all"
+        >
+          <CardTitle className="mb-4">
+            <h1 className="text-lg font-semibold text-zinc-100">
+              {course?.title}
+            </h1>
+          </CardTitle>
+
+          <Button 
+            className="cursor-pointer w-full mt-6" 
+            onClick={() => viewCourse(course)}
           >
-            <CardTitle>
-              <h1 className="text-xl font-semibold text-white ml-6 mt-2">
-                {course?.title}
-              </h1>
-            </CardTitle> 
- 
-            <div className="mt-auto w-full flex justify-end">
-              <Button onClick={() => viewCourse(course)}>View Course</Button>
-            </div>
-          </Card>
-        ))}
-      </div>
+            View Course
+          </Button>
+        </Card>
+      ))}
+
     </div>
+  </div>
   );
 };
 

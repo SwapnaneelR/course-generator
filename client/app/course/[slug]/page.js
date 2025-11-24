@@ -12,6 +12,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import HomeButton from "@/components/ui/HomeButton";
 
 const page = () => {
   const { slug } = useParams();
@@ -35,7 +36,8 @@ const page = () => {
   }, []);
   const router = useRouter();
   return (
-    <div className="min-h-screen bg-zinc-900 text-zinc-50 p-8">
+    <div className="min-h-screen bg-zinc-900 bg-dots text-zinc-50 p-8">
+      <HomeButton/>
       {courses ? (
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Course Title */}

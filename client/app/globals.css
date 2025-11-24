@@ -2,7 +2,10 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
+.bg-dots {
+  background-image: radial-gradient(#6b7280 1px, transparent 1px);
+  background-size: 30px 30px;
+}
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
