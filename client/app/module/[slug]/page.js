@@ -9,34 +9,34 @@ import MCQBlock from "@/components/ui/MCQBlock";
 import HomeButton from "@/components/ui/HomeButton";
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSpeechSynthesis } from "react-speech-kit";
+import { Volume2,Pause } from "lucide-react";
 const Page = () => {
   const [lesson, setLesson] = useState(null);
   const [downloaded, setDownloaded] = useState(false);
   const { slug } = useParams();
+
+  // FIX 1: Changed 'stop' to 'cancel' and removed unused 'listen/listening'
+  const { speak, speaking, cancel } = useSpeechSynthesis();
+
   useEffect(() => {
     async function fetchLesson() {
       const res = await axios.post(
         "http://localhost:5000/api/lesson/create",
-        {
-          id: slug,
-        },
-        {
-          withCredentials: true,
-        }
+        { id: slug },
+        { withCredentials: true }
       );
-      // If lessons is an array, get the first lesson
       const lessons = res.data.module.lessons;
       setLesson(Array.isArray(lessons) ? lessons[0] : lessons);
-      console.log(Array.isArray(lessons) ? lessons[0] : lessons);
     }
     fetchLesson();
   }, [slug]);
 
   if (!lesson) return <Loading />;
   const content = lesson?.content || {};
+
   function downloadPDF() {
-    // alert("Download feature coming soon!");
-    if (downloaded) return; // Prevent multiple downloads
+    if (downloaded) return;
     setDownloaded(true);
     window.open(`http://localhost:5000/api/lesson/download/${slug}`, "_blank");
   }
@@ -47,9 +47,33 @@ const Page = () => {
         <h1 className="text-5xl font-bold mb-6 text-white/80 ">
           {lesson.title}
         </h1>
-       <Button variant="outline" className ="border-2 right-8 fixed" onClick={downloadPDF} >
-          Download Lesson<Download   /> 
+
+        <Button
+          onClick={() => {
+            if (!speaking) { 
+              speak({
+                text: content.notes?.replace(/<[^>]*>/g, "") || content.notes,
+              });
+            } else { 
+              cancel();
+            }
+          }}
+          variant="primary"
+          className="text-white px-4 py-4 border-2 rounded-full cursor-pointer transition-colors"
+          style={{ zIndex: 50 }}
+        >
+          {speaking ? <Pause /> : < Volume2 strokeWidth={1.25} /> } {speaking ? "Pause" : "Listen"}  
         </Button>
+
+        <Button
+          variant="primary"
+          className="border-2 right-8 fixed"
+          style={{ top: "5rem" }}
+          onClick={downloadPDF}
+        > 
+          <Download /> PDF
+        </Button>
+
         <HomeButton />
         <NotesBlock notes={content.notes} />
         <LinkBlock links={content.links} />
