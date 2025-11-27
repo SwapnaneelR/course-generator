@@ -2,6 +2,12 @@
 > This is a full-stack web application for generating and managing online courses, built with Next.js for the client-side and Express.js for the server-side. It features user authentication, course creation, module and lesson management, and AI-assisted content generation.
 
 **Features implemented:**
+- authentication
+- course creation
+- module and lesson management
+- AI-assisted content generation
+- quiz and reference websites
+- downloadable as pdf
 
 
 **Authentication**
