@@ -7,6 +7,11 @@ const LessonSchema = new mongoose.Schema({
     content : {
             type: mongoose.Schema.Types.Mixed,
          required: true
+    },
+    videos : 
+    {
+        required : false,
+        type : [String]
     }
 })
 

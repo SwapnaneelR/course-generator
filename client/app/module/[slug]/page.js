@@ -7,16 +7,17 @@ import NotesBlock from "@/components/ui/NotesBlock";
 import LinkBlock from "@/components/ui/LinkBlock";
 import MCQBlock from "@/components/ui/MCQBlock";
 import HomeButton from "@/components/ui/HomeButton";
-import { Download } from "lucide-react";
+import { Download, Video,   } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSpeechSynthesis } from "react-speech-kit";
-import { Volume2,Pause } from "lucide-react";
+import { Volume2, Pause,  } from "lucide-react";
+import ReactPlayer from "react-player";
+import YoutubeBlock from "@/components/ui/YoutubeBlock";
 const Page = () => {
   const [lesson, setLesson] = useState(null);
   const [downloaded, setDownloaded] = useState(false);
   const { slug } = useParams();
 
-  // FIX 1: Changed 'stop' to 'cancel' and removed unused 'listen/listening'
   const { speak, speaking, cancel } = useSpeechSynthesis();
 
   useEffect(() => {
@@ -50,11 +51,11 @@ const Page = () => {
 
         <Button
           onClick={() => {
-            if (!speaking) { 
+            if (!speaking) {
               speak({
                 text: content.notes?.replace(/<[^>]*>/g, "") || content.notes,
               });
-            } else { 
+            } else {
               cancel();
             }
           }}
@@ -62,22 +63,28 @@ const Page = () => {
           className="text-white px-4 py-4 border-2 rounded-full cursor-pointer transition-colors"
           style={{ zIndex: 50 }}
         >
-          {speaking ? <Pause /> : < Volume2 strokeWidth={1.25} /> } {speaking ? "Pause" : "Listen"}  
+          {speaking ? <Pause /> : <Volume2 strokeWidth={1.25} />}{" "}
+          {speaking ? "Pause" : "Listen"}
         </Button>
 
         <Button
           variant="primary"
-          className="border-2 right-8 fixed"
+          className="border-2 right-8 cursor-pointer fixed"
           style={{ top: "5rem" }}
           onClick={downloadPDF}
-        > 
+        >
           <Download /> PDF
         </Button>
-
+        <div />
+         
+      </div>
+          {console.log(content)}
+      <div>
         <HomeButton />
         <NotesBlock notes={content.notes} />
         <LinkBlock links={content.links} />
         <MCQBlock mcqs={content.mcqs} />
+        <YoutubeBlock videos={lesson.videos} />
       </div>
     </main>
   );

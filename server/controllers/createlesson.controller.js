@@ -1,6 +1,7 @@
 const Module = require("../models/Module.model");
 const Lesson = require("../models/Lesson.model");
 const generateLesson = require("../utils/ai.lesson.helper");
+const getVideos = require("../utils/youtube.helper");
 async function createLessonController(req,res){
     const mod_id = req.body.id;
     const module = await Module.findById(mod_id)
@@ -17,11 +18,14 @@ async function createLessonController(req,res){
     }
     const lesson = await generateLesson(module.title);
     console.log("prints" + lesson.title); 
-    
+    const videos = await getVideos(module.title);
+
     const newLesson = new Lesson({
         title : lesson.title,
         content: lesson.content,
+        videos : videos
     })
+    // console.log(newLesson);
     await newLesson.save();
     module.lessons = (newLesson);
     await module.save();
