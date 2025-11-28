@@ -3,6 +3,7 @@
     The test checks if the `run` function is defined, calls it, and verifies that the
     instance returned is truthy and that the connection state is 1 (connected).
 */
+require('dotenv').config();
 const { run } = require('../config/db.config'); 
 
 
