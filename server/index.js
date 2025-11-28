@@ -12,7 +12,9 @@ app.use(cors({
   origin: "http://localhost:3000",
   credentials: true,
 }));
- 
+app.get("/api/health", (req, res) => {
+  res.status(200).send("ok");
+});
 app.use("/api/auth", authRoute);
 app.use("/api/course",courseRoute);
 app.use("/api/modules", moduleRoute)
@@ -22,7 +24,7 @@ app.get("/", async (req, res) => {
     "Welcome to Backend PORT. You can find the APIs and their functionalities below :"
   );
 });
- 
+  
 run()
   .then(async () => {
     console.log("-> Database connected successfully");
