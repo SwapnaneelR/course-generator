@@ -8,6 +8,9 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Home from "@/components/ui/Home";
 import HomeButton from "@/components/ui/HomeButton";
+
+export const dynamic = 'force-dynamic';
+
 const Page = () => {
   const router = useRouter();
   const { data: session } = useSession();

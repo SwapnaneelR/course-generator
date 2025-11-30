@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Volume2, Pause } from "lucide-react"; 
 import YoutubeBlock from "@/components/ui/YoutubeBlock";
 
+export const dynamic = 'force-dynamic';
+
 const Page = () => {
   const [lesson, setLesson] = useState(null);
   const [downloaded, setDownloaded] = useState(false);

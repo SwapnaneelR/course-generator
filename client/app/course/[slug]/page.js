@@ -14,6 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import HomeButton from "@/components/ui/HomeButton";
 
+export const dynamic = 'force-dynamic';
+
 const Page = () => {
   const { slug } = useParams();
   const [courses, setCourses] = useState({});
