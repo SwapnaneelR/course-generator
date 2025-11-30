@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "./button";
 
 const MCQBlock = ({ mcqs }) => {
