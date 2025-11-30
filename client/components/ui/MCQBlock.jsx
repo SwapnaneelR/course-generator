@@ -1,17 +1,28 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "./button";
 
 const MCQBlock = ({ mcqs }) => {
-  const [answers, setAnswers] = useState([]);
-    answers = useMemo(() => {
+  const initialAnswers = useMemo(() => {
     return Array.isArray(mcqs) ? Array(mcqs.length).fill(null) : [];
+  }, [mcqs]);
+
+  const [answers, setAnswers] = useState(initialAnswers);
+
+  useEffect(() => {
+    if (Array.isArray(mcqs)) {
+      setAnswers(Array(mcqs.length).fill(null));
+    } else {
+      setAnswers([]);
+    }
   }, [mcqs]);
 
   function getAnswer(idx, key) {
     const updated = [...answers];
-    updated[idx] = key === mcqs[idx].answer ? "correct" : "wrong answer";
-    setAnswers(updated);
+    if (updated[idx] === null) {
+      updated[idx] = key === mcqs[idx].answer ? "Correct!" : "Wrong Answer";
+      setAnswers(updated);
+    }
   }
 
   if (!Array.isArray(mcqs) || mcqs.length === 0) {
@@ -26,30 +37,41 @@ const MCQBlock = ({ mcqs }) => {
           <li key={idx} className="mb-3">
             <div className="font-medium mb-1">{mcq.question}</div>
             <ul className="flex flex-col w-100">
-              {Object.entries(mcq.options).map(([key, value]) => (
-                <Button
-                  variant="ghost"
-                  onClick={() => getAnswer(idx, key)}
-                  key={key}
-                  className="mb-1 flex items-center justify-start"
-                >
-                  <span
-                    className="font-semibold text-left mr-2"
-                    style={{
-                      textAlign: "left",
-                      width: "2em",
-                      display: "inline-block",
-                    }}
+              {Object.entries(mcq.options).map(([key, value]) => {
+                const isSelected = answers[idx] !== null;
+
+                return (
+                  <Button
+                    disabled={isSelected}
+                    variant="ghost"
+                    onClick={() => getAnswer(idx, key)}
+                    key={key}
+                    className="mb-1 flex items-center justify-start"
                   >
-                    {key}:
-                  </span>
-                  <span className="text-left">{value}</span>
-                </Button>
-              ))}
+                    <span
+                      className="font-semibold text-left mr-2"
+                      style={{
+                        textAlign: "left",
+                        width: "2em",
+                        display: "inline-block",
+                      }}
+                    >
+                      {key}:
+                    </span>
+                    <span className="text-left">{value}</span>
+                  </Button>
+                );
+              })}
             </ul>
             <div>
               {answers[idx] && (
-                <h2 className="border border-1 border-white/60 w-fit p-2">
+                <h2
+                  className={`border border-1 w-fit p-1 ${
+                    answers[idx] === "Correct!"
+                      ? "border-green-500   text-green-200"
+                      : "border-red-500   text-red-400"
+                  }`}
+                >
                   {answers[idx]}
                 </h2>
               )}
