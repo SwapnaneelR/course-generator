@@ -16,7 +16,7 @@ const Sidebar = () => {
   const handleSignin = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`,
         {
           name: session?.user?.name,
           email: session?.user?.email,
@@ -41,7 +41,7 @@ const Sidebar = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/course/get",
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/course/get`,
           {
             user: session.user,
           },

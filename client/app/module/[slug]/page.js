@@ -24,7 +24,7 @@ const Page = () => {
   useEffect(() => {
     async function fetchLesson() {
       const res = await axios.post(
-        "http://localhost:5000/api/lesson/create",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/lesson/create`,
         { id: slug },
         { withCredentials: true }
       );
@@ -70,7 +70,7 @@ const Page = () => {
   function downloadPDF() {
     if (downloaded) return;
     setDownloaded(true);
-    window.open(`http://localhost:5000/api/lesson/download/${slug}`, "_blank");
+    window.open(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/lesson/download/${slug}`, "_blank");
   }
 
   return (

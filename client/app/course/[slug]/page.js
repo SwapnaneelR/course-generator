@@ -22,7 +22,7 @@ const Page = () => {
   useEffect(() => {
     async function createModule() {
       const res = await axios.post(
-        "http://localhost:5000/api/modules/create",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/modules/create`,
         {
           id: slug,
         },

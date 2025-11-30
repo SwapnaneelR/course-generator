@@ -20,7 +20,7 @@ const Page = () => {
         if (!session) return;
         try {
           const response = await axios.post(
-            "http://localhost:5000/api/course/get",
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/course/get`,
             {
               user: session.user,
             },
