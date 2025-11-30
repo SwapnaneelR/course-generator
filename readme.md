@@ -16,7 +16,7 @@
  
 
 **Next.js client**
-- App directory with pages for home, course listing, course details (`/course/[slug]`), and module pages (`/module/[slug]`).
+- App directory with Pages for home, course listing, course details (`/course/[slug]`), and module Pages (`/module/[slug]`).
 - UI components under `components/ui/` (buttons, cards, `Courses.jsx`, `Home.jsx`, `Sidebar.jsx`, `MCQBlock.jsx`, `NotesBlock.jsx`, etc.).
 - Global styles and theme provider (`app/globals.css`, `components/ui/theme-provider.jsx`).
 - Client API route for authentication and Jest-based tests (`jest.config.js`, `__test__/auth-config.test.js`).

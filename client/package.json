@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "npx eslint",
     "test": "jest --watchAll=false"
   },
   "dependencies": {
@@ -34,6 +34,8 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
     "babel-jest": "^30.0.5",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",

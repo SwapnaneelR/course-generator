@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Home from "@/components/ui/Home";
 import HomeButton from "@/components/ui/HomeButton";
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [courses, setCourses] = useState([]);
@@ -63,4 +63,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

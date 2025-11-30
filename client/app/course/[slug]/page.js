@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import HomeButton from "@/components/ui/HomeButton";
 
-const page = () => {
+const Page = () => {
   const { slug } = useParams();
   const [courses, setCourses] = useState({});
   useEffect(() => {
@@ -100,4 +100,4 @@ const page = () => {
     </div>
   );
 }
-export default page;
+export default Page;

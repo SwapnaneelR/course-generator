@@ -4,12 +4,8 @@ import { Button } from "./button";
 
 const MCQBlock = ({ mcqs }) => {
   const [answers, setAnswers] = useState([]);
-
-  // 🔒 keep answers array in sync with mcqs
-  useEffect(() => {
-    if (Array.isArray(mcqs)) {
-      setAnswers(Array(mcqs.length).fill(null));
-    }
+    answers = useMemo(() => {
+    return Array.isArray(mcqs) ? Array(mcqs.length).fill(null) : [];
   }, [mcqs]);
 
   function getAnswer(idx, key) {
@@ -18,7 +14,6 @@ const MCQBlock = ({ mcqs }) => {
     setAnswers(updated);
   }
 
-  // 🚫 guard clause: nothing to render if mcqs missing/empty
   if (!Array.isArray(mcqs) || mcqs.length === 0) {
     return null;
   }
