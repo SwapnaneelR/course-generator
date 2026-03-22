@@ -16,29 +16,103 @@ export const dynamic = 'force-dynamic';
 
 const Page = () => {
   const [lesson, setLesson] = useState(null);
+  const [jobStatus, setJobStatus] = useState("idle");
+  const [error, setError] = useState("");
   const [downloaded, setDownloaded] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const utteranceRef = useRef(null);
   const { slug } = useParams();
 
   useEffect(() => {
-    async function fetchLesson() {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/lesson/create`,
-        { id: slug },
-        { withCredentials: true }
-      );
-      const lessons = res.data.module.lessons;
-      setLesson(Array.isArray(lessons) ? lessons[0] : lessons);
+    let isMounted = true;
+    let timerId;
+
+    async function pollLessonStatus(jobId) {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/lesson/status/${jobId}`,
+          { withCredentials: true }
+        );
+
+        if (!isMounted) return;
+
+        setJobStatus(res.data.status || "processing");
+
+        if (res.data.status === "completed") {
+          const lessonData = res.data.lesson;
+          setLesson(Array.isArray(lessonData) ? lessonData[0] : lessonData);
+          return;
+        }
+
+        if (res.data.status === "failed") {
+          setError(res.data.message || "Lesson generation failed.");
+          return;
+        }
+
+        timerId = setTimeout(() => pollLessonStatus(jobId), 3000);
+      } catch (pollError) {
+        if (!isMounted) return;
+        setError(
+          pollError?.response?.data?.message ||
+            "Unable to fetch lesson status."
+        );
+      }
     }
+
+    async function fetchLesson() {
+      try {
+        setError("");
+        setJobStatus("queued");
+
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/lesson/create`,
+          { id: slug },
+          { withCredentials: true }
+        );
+
+        if (!isMounted) return;
+
+        if (res.data.status === "completed") {
+          const lessonData = res.data.lesson || res.data.module?.lessons;
+          setJobStatus("completed");
+          setLesson(Array.isArray(lessonData) ? lessonData[0] : lessonData);
+          return;
+        }
+
+        if (!res.data.jobId) {
+          setError("Could not start lesson generation job.");
+          return;
+        }
+
+        await pollLessonStatus(res.data.jobId);
+      } catch (fetchError) {
+        if (!isMounted) return;
+        setError(
+          fetchError?.response?.data?.message || "Failed to generate lesson."
+        );
+      }
+    }
+
     fetchLesson();
 
     return () => {
+      isMounted = false;
+      if (timerId) {
+        clearTimeout(timerId);
+      }
       window.speechSynthesis.cancel();
     };
   }, [slug]);
 
-  if (!lesson) return <Loading />;
+  if (!lesson) {
+    return (
+      <main className="flex overflow-auto flex-col items-center justify-center min-h-screen bg-zinc-900 text-white p-4 gap-4">
+        <Loading />
+        <p className="text-sm text-zinc-300">Status: {jobStatus}</p>
+        {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      </main>
+    );
+  }
 
   const content = lesson?.content || {};
 

@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const { run } = require("./config/db.config.js"); 
 const cors = require("cors");
+const morgan = require("morgan");
 const authRoute = require("./routers/authroute");
 const courseRoute = require("./routers/course.route");
 const moduleRoute = require("./routers/module.route");
@@ -20,6 +21,7 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
+app.use(morgan("dev"));
 app.get("/api/health", (req, res) => {
   res.status(200).send("ok");
 });
